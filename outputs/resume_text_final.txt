@@ -1,0 +1,50 @@
+                              ALEX MORGAN
+                                            JUNIOR DATA SCIENTIST
+
+
+
+
+PROFILE                                                                    EDUCATION
+Junior data scientist with a strong base in data analysis
+and statistical methods. Skilled in cleaning, exploring,
+and visualizing data to uncover clear insights. Able to                    Bachelor of Computer Science
+use Python and R to support problem‑solving and
+simple machine learning tasks.
+
+
+PROJECTS
+
+Customer Churn Prediction System
+
+Built a classification model to predict customer churn using Python and Scikit-learn.
+Visualized results using Matplotlib and Seaborn.
+
+
+
+Sales Forecasting Analysis
+
+    Developed time series forecasting models to predict monthly sales trends.
+    Implemented regression models and compared forecasting accuracy.
+    Conducted data preprocessing and handled missing values.
+    Presented insights and recommendations based on forecast results.
+    Tools: Python, Pandas, NumPy, Statsmodels, Matplotlib
+
+
+EXPERIENCE
+                 Insight Analytics Pvt. Ltd. — Remote
+                 Junior Data Science Intern
+2023
+                     Assisted in building machine learning models to analyze customer behavior and improve retention
+                     strategies.
+                     Cleaned and preprocessed large datasets using Python, Pandas, and NumPy.
+                     Created data visualizations and dashboards using Matplotlib and Seaborn to communicate insights
+                     to stakeholders.
+
+
+
+SKILLS
+
+Python                                                                   sql
+transformers                                                             Programming
+Adaptability                                                             numpy,pandas
+

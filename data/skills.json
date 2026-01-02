@@ -1,0 +1,783 @@
+{
+  "skills_dictionary": {
+    "datascientist": {
+      "core": [
+        "python",
+        "statistics",
+        "probability",
+        "sql",
+        "featureengineering",
+        "supervisedlearning",
+        "unsupervisedlearning"
+      ],
+      "preferred": [
+        "cnn",
+        "rnn",
+        "transformers",
+        "experimentation",
+        "datavisualization"
+      ],
+      "tools": [
+        "numpy",
+        "pandas",
+        "scikitlearn",
+        "matplotlib",
+        "seaborn"
+      ]
+    },
+    "mlengineer": {
+      "core": [
+        "python",
+        "modeldeployment",
+        "mlops",
+        "monitoring",
+        "pipelines",
+        "optimization",
+        "distributedtraining"
+      ],
+      "preferred": [
+        "cnn",
+        "rnn",
+        "transformers",
+        "featureengineering"
+      ],
+      "tools": [
+        "tensorflow",
+        "pytorch",
+        "docker",
+        "kubernetes",
+        "sql"
+      ]
+    },
+    "aiengineer": {
+      "core": [
+        "deeplearningarchitectures",
+        "nlp",
+        "computervision",
+        "reinforcementlearning",
+        "modeloptimization",
+        "distributedtraining",
+        "modelserving"
+      ],
+      "preferred": [
+        "quantization",
+        "pruning",
+        "gpucomputing",
+        "productionmonitoring",
+        "apiintegration"
+      ],
+      "tools": [
+        "tensorflow",
+        "pytorch",
+        "onnx",
+        "tensorrt"
+      ]
+    },
+    "softwaredeveloper": {
+      "core": [
+        "datastructures",
+        "algorithms",
+        "oop",
+        "operatingsystems",
+        "computernetworks",
+        "dbms",
+        "systemdesign",
+        "debugging",
+        "cleancode",
+        "restapis"
+      ],
+      "preferred": [
+        "html",
+        "css",
+        "react",
+        "docker",
+        "cicd",
+        "unittesting"
+      ],
+      "tools": [
+        "c++",
+        "java",
+        "python",
+        "javascript",
+        "git",
+        "linux",
+        "mysql",
+        "postgresql",
+        "mongodb"
+      ]
+    },
+    "webdeveloper": {
+      "core": [
+        "html",
+        "css",
+        "javascript",
+        "react",
+        "responsivedesign",
+        "nodejs",
+        "restapis",
+        "securitybasics",
+        "performanceoptimization"
+      ],
+      "preferred": [
+        "nextjs",
+        "django",
+        "springboot",
+        "graphql",
+        "testing"
+      ],
+      "tools": [
+        "git",
+        "docker",
+        "mysql",
+        "postgresql",
+        "mongodb",
+        "redis"
+      ]
+    },
+    "cybersecurityanalyst": {
+      "core": [
+        "networking",
+        "linux",
+        "windowsinternals",
+        "operatingsystems",
+        "cryptography",
+        "threatmodeling",
+        "malwareanalysis",
+        "incidentresponse",
+        "vulnerabilityassessment"
+      ],
+      "preferred": [
+        "owasptop10",
+        "cloudsecurity",
+        "iam",
+        "compliance"
+      ],
+      "tools": [
+        "wireshark",
+        "metasploit",
+        "burpsuite",
+        "nmap",
+        "siem"
+      ]
+    },
+    "cloudengineer": {
+      "core": [
+        "linux",
+        "networking",
+        "virtualization",
+        "docker",
+        "kubernetes",
+        "terraform",
+        "cloudformation",
+        "cicd"
+      ],
+      "preferred": [
+        "monitoring",
+        "logging"
+      ],
+      "tools": [
+        "aws",
+        "azure",
+        "gcp",
+        "prometheus",
+        "grafana"
+      ]
+    },
+    "automationengineer": {
+      "core": [
+        "manualtesting",
+        "testdesign",
+        "automationtesting"
+      ],
+      "preferred": [
+        "java",
+        "python",
+        "javascript",
+        "cicd"
+      ],
+      "tools": [
+        "selenium",
+        "playwright",
+        "cypress",
+        "postman",
+        "git",
+        "linux"
+      ]
+    },
+    "devopsengineer": {
+      "core": [
+        "linux",
+        "networking",
+        "bash",
+        "cicd",
+        "docker",
+        "kubernetes",
+        "terraform",
+        "monitoring",
+        "logging"
+      ],
+      "preferred": [
+        "ansible",
+        "jenkins",
+        "githubactions",
+        "elk"
+      ],
+      "tools": [
+        "git",
+        "aws",
+        "azure",
+        "gcp",
+        "prometheus",
+        "grafana"
+      ]
+    },
+    "systemadmin": {
+      "core": [
+        "linuxadministration",
+        "windowsadministration",
+        "virtualization",
+        "networking",
+        "backup",
+        "recovery",
+        "security"
+      ],
+      "preferred": [
+        "patchmanagement",
+        "accesscontrol",
+        "hardware"
+      ],
+      "tools": [
+        "activedirectory",
+        "monitoringtools",
+        "ticketingsystems"
+      ]
+    },
+    "itsupport": {
+      "core": [
+        "linuxadministration",
+        "windowsadministration",
+        "networking",
+        "backup",
+        "recovery"
+      ],
+      "preferred": [
+        "hardware",
+        "patchmanagement",
+        "accesscontrol"
+      ],
+      "tools": [
+        "activedirectory",
+        "monitoringtools",
+        "ticketingsystems"
+      ]
+    },
+    "businessanalyst": {
+      "core": [
+        "requirementsgathering",
+        "businessprocessmodeling",
+        "datavisualization",
+        "statistics",
+        "criticalthinking",
+        "communication"
+      ],
+      "preferred": [
+        "agile",
+        "scrum",
+        "jira",
+        "presentation",
+        "documentation"
+      ],
+      "tools": [
+        "excel",
+        "sql",
+        "powerbi",
+        "tableau"
+      ]
+    },
+    "consultant": {
+      "core": [
+        "problemsolving",
+        "strategicthinking",
+        "marketanalysis",
+        "financialmodeling",
+        "communication",
+        "presentation"
+      ],
+      "preferred": [
+        "stakeholdermanagement",
+        "negotiation",
+        "leadership",
+        "projectmanagement"
+      ],
+      "tools": [
+        "excel",
+        "powerpoint"
+      ]
+    },
+    "productmanager": {
+      "core": [
+        "productstrategy",
+        "roadmapping",
+        "userresearch",
+        "marketanalysis",
+        "requirementsgathering",
+        "prioritization",
+        "communication",
+        "leadership"
+      ],
+      "preferred": [
+        "agile",
+        "scrum",
+        "backlogmanagement",
+        "metrics",
+        "abtesting"
+      ],
+      "tools": [
+        "jira",
+        "confluence",
+        "figma"
+      ]
+    },
+    "projectmanager": {
+      "core": [
+        "projectplanning",
+        "scheduling",
+        "riskmanagement",
+        "costmanagement",
+        "stakeholdermanagement",
+        "communication",
+        "leadership"
+      ],
+      "preferred": [
+        "agile",
+        "scrum",
+        "waterfall",
+        "resourceallocation",
+        "documentation"
+      ],
+      "tools": [
+        "jira",
+        "confluence"
+      ]
+    },
+    "marketingexecutive": {
+      "core": [
+        "digitalmarketing",
+        "contentmarketing",
+        "branding",
+        "marketresearch",
+        "analytics",
+        "communication",
+        "creativity"
+      ],
+      "preferred": [
+        "seo",
+        "sem",
+        "campaignmanagement",
+        "emailmarketing"
+      ],
+      "tools": [
+        "googleanalytics",
+        "hubspot"
+      ]
+    },
+    "hrexecutive": {
+      "core": [
+        "recruitment",
+        "employeeengagement",
+        "performanceappraisal",
+        "laborlaws",
+        "communication",
+        "conflictresolution"
+      ],
+      "preferred": [
+        "payroll",
+        "traininganddevelopment",
+        "negotiation"
+      ],
+      "tools": [
+        "workday",
+        "sap",
+        "excel"
+      ]
+    },
+    "operationsanalyst": {
+      "core": [
+        "processoptimization",
+        "supplychain",
+        "logistics",
+        "inventorymanagement",
+        "dataanalysis",
+        "forecasting",
+        "decisionmaking"
+      ],
+      "preferred": [
+        "lean",
+        "sixsigma"
+      ],
+      "tools": [
+        "excel",
+        "sql",
+        "powerbi",
+        "tableau"
+      ]
+    },
+    "financialanalyst": {
+      "core": [
+        "financialmodeling",
+        "valuation",
+        "forecasting",
+        "budgeting",
+        "accounting",
+        "corporatefinance",
+        "financialstatements",
+        "riskanalysis"
+      ],
+      "preferred": [
+        "ratioanalysis",
+        "datavisualization"
+      ],
+      "tools": [
+        "excel",
+        "powerpoint"
+      ]
+    },
+    "accountant": {
+      "core": [
+        "financialaccounting",
+        "managementaccounting",
+        "taxation",
+        "auditing",
+        "bookkeeping",
+        "financialstatements",
+        "compliance"
+      ],
+      "preferred": [
+        "gst",
+        "ifrs",
+        "attentiontodetail"
+      ],
+      "tools": [
+        "tally",
+        "sap",
+        "excel"
+      ]
+    },
+    "managementtrainee": {
+      "core": [
+        "businessfundamentals",
+        "communication",
+        "presentation",
+        "analyticalthinking",
+        "problemsolving",
+        "teamwork",
+        "adaptability"
+      ],
+      "preferred": [
+        "leadershippotential",
+        "basicfinance",
+        "basicmarketing"
+      ],
+      "tools": [
+        "excel",
+        "powerpoint"
+      ]
+    },
+    "researchassistant": {
+      "core": [
+        "researchmethodology",
+        "literaturereview",
+        "datacollection",
+        "dataanalysis",
+        "statistics",
+        "academicwriting",
+        "criticalthinking"
+      ],
+      "preferred": [
+        "experimentation",
+        "documentation"
+      ],
+      "tools": [
+        "python",
+        "r",
+        "latex"
+      ]
+    },
+    "teachingassistant": {
+      "core": [
+        "subjectexpertise",
+        "lessonplanning",
+        "studentmentoring",
+        "communication",
+        "assessment",
+        "grading"
+      ],
+      "preferred": [
+        "classroommanagement",
+        "patience",
+        "documentation"
+      ],
+      "tools": []
+    },
+    "msapplications": {
+      "core": [
+        "researchproposal",
+        "statementofpurpose",
+        "literaturereview",
+        "academicwriting",
+        "researchprojects"
+      ],
+      "preferred": [
+        "publications"
+      ],
+      "tools": [
+        "gre",
+        "toefl",
+        "ielts"
+      ]
+    },
+    "labroles": {
+      "core": [
+        "laboratorytechniques",
+        "experimentation",
+        "datasampling",
+        "analysis",
+        "reportwriting",
+        "safetyprotocols"
+      ],
+      "preferred": [
+        "equipmenthandling",
+        "attentiontodetail",
+        "documentation"
+      ],
+      "tools": []
+    },
+    "academicjobs": {
+      "core": [
+        "subjectexpertise",
+        "research",
+        "teaching",
+        "curriculumdesign",
+        "publications",
+        "academicwriting",
+        "mentoring"
+      ],
+      "preferred": [
+        "grantwriting",
+        "peerreview"
+      ],
+      "tools": []
+    },
+    "investmentbanking": {
+      "core": [
+        "financialmodeling",
+        "valuation",
+        "mergersandacquisitions",
+        "corporatefinance",
+        "accounting",
+        "marketanalysis",
+        "communication",
+        "negotiation"
+      ],
+      "preferred": [
+        "stressmanagement"
+      ],
+      "tools": [
+        "excel",
+        "powerpoint"
+      ]
+    },
+    "consultingfirms": {
+      "core": [
+        "strategicthinking",
+        "marketanalysis",
+        "financialmodeling",
+        "problemsolving",
+        "communication",
+        "presentation",
+        "leadership"
+      ],
+      "preferred": [
+        "stakeholdermanagement",
+        "clientmanagement"
+      ],
+      "tools": [
+        "excel",
+        "powerpoint"
+      ]
+    },
+    "auditingfirms": {
+      "core": [
+        "auditing",
+        "accounting",
+        "financialstatements",
+        "riskassessment",
+        "compliance",
+        "attentiontodetail"
+      ],
+      "preferred": [
+        "gst",
+        "taxation",
+        "ifrs"
+      ],
+      "tools": [
+        "excel"
+      ]
+    },
+    "equityresearch": {
+      "core": [
+        "financialmodeling",
+        "valuation",
+        "companyanalysis",
+        "industryanalysis",
+        "financialstatements",
+        "accounting",
+        "reportwriting",
+        "marketresearch"
+      ],
+      "preferred": [
+        "communication"
+      ],
+      "tools": [
+        "excel",
+        "powerpoint"
+      ]
+    },
+    "riskanalyst": {
+      "core": [
+        "riskmodeling",
+        "statistics",
+        "probability",
+        "financialanalysis",
+        "scenarioanalysis",
+        "regulatorycompliance",
+        "criticalthinking"
+      ],
+      "preferred": [
+        "stress_testing"
+      ],
+      "tools": [
+        "sql",
+        "python",
+        "datavisualization"
+      ]
+    },
+    "teacher": {
+      "core": [
+        "with",
+        "mathematics",
+        "students",
+        "school",
+        "curriculum",
+        "student",
+        "learning",
+        "classroom"
+      ],
+      "preferred": [
+        "teaching",
+        "high",
+        "teacher",
+        "lessons",
+        "plans",
+        "development"
+      ],
+      "tools": [
+        "skills",
+        "experience",
+        "seeking",
+        "dedicated",
+        "knowledgeable",
+        "educate"
+      ]
+    },
+    "mbbsdoctor": {
+      "core": [
+        "medical",
+        "preferred",
+        "gurgaon",
+        "salary",
+        "evaluate",
+        "with",
+        "commute",
+        "relocate"
+      ],
+      "preferred": [
+        "work",
+        "year",
+        "mbbs",
+        "doctor",
+        "location",
+        "fresher"
+      ],
+      "tools": [
+        "patients",
+        "provide",
+        "appropriate",
+        "treatment",
+        "various",
+        "illnesses"
+      ]
+    }
+  },
+  "role_aliases": {
+    "softwareengineer": "softwaredeveloper",
+    "qa": "automationengineer",
+    "graduatetrainee": "managementtrainee",
+    "phd": "msapplications"
+  },
+  "skill_aliases": {
+    "postgresql": "sql",
+    "mysql": "sql",
+    "sqlite": "sql",
+    "mariadb": "sql",
+    "mssql": "sql"
+  },
+  "role_keywords": {
+    "datascientist": [
+      "data",
+      "analysis",
+      "model",
+      "statistics",
+      "python",
+      "machine learning"
+    ],
+    "mlengineer": [
+      "deployment",
+      "pipeline",
+      "mlops",
+      "training",
+      "model"
+    ],
+    "webdeveloper": [
+      "html",
+      "css",
+      "javascript",
+      "frontend",
+      "backend",
+      "website"
+    ],
+    "softwaredeveloper": [
+      "software",
+      "java",
+      "c++",
+      "development",
+      "programming"
+    ],
+    "teacher": [
+      "with",
+      "mathematics",
+      "students",
+      "school",
+      "curriculum",
+      "student"
+    ],
+    "mbbsdoctor": [
+      "medical",
+      "preferred",
+      "gurgaon",
+      "salary",
+      "evaluate",
+      "with"
+    ]
+  }
+}

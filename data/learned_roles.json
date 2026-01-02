@@ -1,0 +1,58 @@
+{
+    "teacher": {
+        "core": [
+            "with",
+            "mathematics",
+            "students",
+            "school",
+            "curriculum",
+            "student",
+            "learning",
+            "classroom"
+        ],
+        "preferred": [
+            "teaching",
+            "high",
+            "teacher",
+            "lessons",
+            "plans",
+            "development"
+        ],
+        "tools": [
+            "skills",
+            "experience",
+            "seeking",
+            "dedicated",
+            "knowledgeable",
+            "educate"
+        ]
+    },
+    "mbbsdoctor": {
+        "core": [
+            "medical",
+            "preferred",
+            "gurgaon",
+            "salary",
+            "evaluate",
+            "with",
+            "commute",
+            "relocate"
+        ],
+        "preferred": [
+            "work",
+            "year",
+            "mbbs",
+            "doctor",
+            "location",
+            "fresher"
+        ],
+        "tools": [
+            "patients",
+            "provide",
+            "appropriate",
+            "treatment",
+            "various",
+            "illnesses"
+        ]
+    }
+}

@@ -1,0 +1,27 @@
+Sample web developer job description
+The internet continues to develop exponentially, and [Company X] remains on the cutting edge of exceptional website design. We’re looking for a skilled web developer to join our team of innovative designers who are consistently raising the bar for creativity and user experience. The ideal candidate is a talented artist who has extensive technical expertise and can work independently or with a team to create, maintain, and update client websites in a variety of industries. Proficiency with JavaScript, HTML, CSS, and web applications and services is essential for succeeding in this role. The web developer will have an immediate impact on our brand and those of our clients, and will help solidify our industrywide reputation for stellar design.
+
+Objectives of this role
+Create well-designed and tested code using best practices for web development, including for responsive design and mobile display
+Create websites and interfaces using standard HTML/CSS practices, and incorporate data from back-end databases and services
+Create and maintain workflows for teams, providing visibility and ensuring balance 
+Develop or validate testing schedules that address all browsers and devices, ensuring web content can be accessed on any computer
+Maintain up-to-date knowledge of industry trends and technologies
+Responsibilities
+Meet regularly with stakeholders and managers to review business and functional requirements and to determine project scopes and specifications
+Develop and maintain operational systems, tools, and processes, and participate in tactical and strategic development projects
+Ensure software stability via regression, support quality assurance, and perform unit and user-acceptance testing to identify bugs 
+Make small edits requested by customers, develop plans for completing larger projects, and suggest solutions to improve existing websites
+Perform UI design and coding and create reusable objects and wireframes for web pages and email templates
+Conduct file backups regularly to local directories
+Required skills and qualifications
+Dedication to innovative, sophisticated designs and collaborative problem-solving
+Experience in planning and developing websites across multiple products and organizations
+Extensive knowledge of web applications, programming languages, and web services — including API, CSS, CSS3, cross-browser compatibility, HTML, HTML5, JavaScript, jQuery, PHP, security principles, REST, SOAP, and web user interface design
+Proficiency with content management systems, including WordPress and Drupal
+Experience with Windows and Linux environments
+Preferred skills and qualifications
+Bachelor’s degree (or equivalent) in web design, multimedia design, or related field
+Experience in e-commerce applications and development
+Proven success in project coordination
+Experience in implementing web development workflows and operations using a variety of tools, including GitHub

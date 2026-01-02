@@ -1,0 +1,22 @@
+We are hiring a Machine Learning Engineer to design, build, and deploy production-grade machine learning systems.
+
+Required qualifications:
+Strong proficiency in Python.
+Experience with machine learning and deep learning.
+Hands-on experience with model deployment and MLOps pipelines.
+Experience building data pipelines and monitoring models in production.
+Strong understanding of optimization techniques and distributed training.
+Experience with CNNs, RNNs, and transformer architectures.
+Solid knowledge of statistics and probability.
+
+Preferred qualifications:
+Experience with PyTorch and TensorFlow.
+Experience with Docker and Kubernetes.
+Experience working with large scale systems and cloud platforms.
+
+Responsibilities:
+Develop, train, and optimize ML models.
+Deploy models to production environments.
+Build and maintain automated pipelines.
+Monitor model performance and retrain when necessary.
+Collaborate with data scientists and software engineers.

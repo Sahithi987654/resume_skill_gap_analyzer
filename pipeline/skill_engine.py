@@ -200,15 +200,18 @@ def evaluate_multiple_roles(cleaned_resume_text, raw_resume_text, jd_texts):
 
     return results
 
+from pathlib import Path
 
-
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = BASE_DIR / "data"
 
 jd_texts = {
-    "webdeveloper": open(r"data\jd_web.txt", encoding="utf-8").read(),
-    "datascientist": open(r"data\jd_ds.txt", encoding="utf-8").read(),
-    "mlengineer": open(r"data\jd_ml.txt", encoding="utf-8").read(),
-    "softwaredeveloper": open(r"data\jd_swe.txt", encoding="utf-8").read()
+    "webdeveloper": (DATA_DIR / "jd_web.txt").read_text(encoding="utf-8"),
+    "datascientist": (DATA_DIR / "jd_ds.txt").read_text(encoding="utf-8"),
+    "mlengineer": (DATA_DIR / "jd_ml.txt").read_text(encoding="utf-8"),
+    "softwaredeveloper": (DATA_DIR / "jd_swe.txt").read_text(encoding="utf-8"),
 }
+
 def explain_gaps(report):
     lines = []
     if report["core"]["missing"]:

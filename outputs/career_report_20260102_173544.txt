@@ -1,9 +1,0 @@
-Recommended Role: DATASCIENTIST
-Match Score: 83.33%
-Verdict: STRONG FIT
-
-Gap Analysis:
-Critical core skills missing: statistics
-
-Learning Roadmap:
-- Learn core skill: statistics

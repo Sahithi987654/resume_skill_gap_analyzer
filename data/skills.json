@@ -664,30 +664,30 @@
     },
     "teacher": {
       "core": [
-        "with",
         "mathematics",
-        "students",
-        "school",
-        "curriculum",
-        "student",
-        "learning",
-        "classroom"
+        "algebra",
+        "geometry",
+        "trigonometry",
+        "calculus",
+        "statistics",
+        "lessonplanning",
+        "classroommanagement",
+        "studentassessment",
+        "curriculumdesign"
       ],
       "preferred": [
-        "teaching",
-        "high",
-        "teacher",
-        "lessons",
-        "plans",
-        "development"
+        "educationalpsychology",
+        "studentmentoring",
+        "communication",
+        "presentation",
+        "differentiatedinstruction"
       ],
       "tools": [
-        "skills",
-        "experience",
-        "seeking",
-        "dedicated",
-        "knowledgeable",
-        "educate"
+        "smartboard",
+        "lms",
+        "googleclassroom",
+        "msexcel",
+        "powerpoint"
       ]
     },
     "mbbsdoctor": {
@@ -726,12 +726,13 @@
     "phd": "msapplications"
   },
   "skill_aliases": {
-    "postgresql": "sql",
-    "mysql": "sql",
-    "sqlite": "sql",
-    "mariadb": "sql",
-    "mssql": "sql"
-  },
+  "postgre sql": "postgresql",
+  "my sql": "mysql",
+  "sqlite": "sqlite",
+  "mariadb": "mariadb",
+  "mssql": "mssql",
+  "sci kit learn": "scikitlearn"
+},
   "role_keywords": {
     "datascientist": [
       "data",

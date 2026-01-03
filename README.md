@@ -1,9 +1,9 @@
 Resume Skill Gap Analyzer
 
-This project builds a complete pipeline for analyzing resumes against job descriptions in order to determine role suitability, identify skill gaps, and generate actionable learning plans.
+An intelligent career analysis system that evaluates resumes against job descriptions to determine role suitability, identify skill gaps, and generate a personalized learning roadmap.
 
-The system goes beyond basic keyword matching by modeling hiring expectations using a structured skill ontology and rule-based evaluation.
-It also supports automatic learning of new job roles from previously unseen job descriptions.
+Unlike basic keyword-matching tools, this system models real hiring expectations using a structured skill ontology and deterministic reasoning, ensuring transparent and explainable results.
+
 
 Problem Statement
 
@@ -38,7 +38,7 @@ Job Description
 
 Key Features
 
-PDF resume extraction using Poppler
+Robust PDF resume extraction and normalization
 Text normalization and cleaning
 Role-based skill ontology (core / preferred / tools)
 Weighted scoring model for career fit
@@ -48,6 +48,14 @@ Detailed skill gap analysis
 Personalized learning roadmap generation
 Streamlit-based interactive interface
 Exportable reports (TXT and PDF)
+
+Why This Project Matters
+
+Most resume screening tools rely on shallow keyword matching and black-box scoring.
+This system focuses on:
+- Transparency of decisions
+- Real hiring logic
+- Actionable improvement plans for candidates
 
 Project Structure
 

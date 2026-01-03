@@ -2,351 +2,295 @@ import json
 import re
 from datetime import datetime
 from pathlib import Path
-from reportlab.lib.pagesizes import A4
-
-def load_skill_config():
-    with open("data/skills.json", encoding="utf-8") as f:
-        config = json.load(f)
-    return (
-        config["skills_dictionary"],
-        config["role_aliases"],
-        config.get("skill_aliases", {})
-    )
-SKILLS_DICTIONARY, ROLE_ALIASES, SKILL_ALIASES = load_skill_config()
-def normalize(text):
-    text = text.lower()
-    text = re.sub(r'[^a-z0-9+.# ]', ' ', text)
-    text = re.sub(r'\s+', ' ', text)
-    return text
-def normalize_skill(skill,skill_aliases):
-    return skill_aliases.get(skill, skill)
-
-def extract_project_sections(text):
-    lines = text.splitlines()
-
-    project_lines = []
-    capture = False
-
-    START_HEADERS = ["projects", "project experience"]
-    STOP_HEADERS = ["education", "skills", "certifications", "summary", "interests", "objective", "objectives"]
-
-    for line in lines:
-        clean = line.strip().lower()
-
-        if clean in START_HEADERS:
-            capture = True
-            continue
-        if capture and clean in STOP_HEADERS:
-            break
-
-        if capture and line.strip():
-            project_lines.append(line.strip())
-
-    return " ".join(project_lines)
-def project_strength_multiplier(project_text):
-    keywords = ["built", "implemented", "designed", "developed", "deployed"]
-    has_numbers = bool(re.search(r'\d+', project_text.lower()))
-    score = 1
-    if any(k in project_text.lower() for k in keywords):
-        score += 1
-    if has_numbers:
-        score += 1
-    return score
-
-def extract_skills(text, role):
-    skills_dictionary = SKILLS_DICTIONARY
-    role_aliases = ROLE_ALIASES
-    skill_aliases = SKILL_ALIASES
-
-    text = normalize(text)
-    for alias, canonical in skill_aliases.items():
-        text = re.sub(r'\b' + re.escape(alias) + r'\b', canonical, text)
-
-    from collections import Counter
-    found = {"core": Counter(), "preferred": Counter(), "tools": Counter()}
+from collections import Counter
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 
 
-    role = role_aliases.get(role, role)
-    role_skills = skills_dictionary[role]
-
-    for tier in ["core", "preferred", "tools"]:
-        for skill in role_skills[tier]:
-
-            words = skill.split()
-
-            if len(words) == 1:
-                pattern = r'\b' + re.escape(skill) + r'\b'
-            else:
-                pattern = r'\b' + r'\s+'.join(map(re.escape, words)) + r'\b'
-
-            if re.search(pattern, text):
-                normalised=normalize_skill(skill,skill_aliases)
-                found[tier][normalised]+=1
-
-    return found
-
-def compare_skills(resume, jd):
-    report = {}
-
-    for tier in ["core", "preferred", "tools"]:
-        resume_counter = resume[tier]
-        jd_set = set(jd[tier].keys())
-
-        matched = {s: resume_counter[s] for s in resume_counter if s in jd_set}
-        missing = [s for s in jd_set if s not in resume_counter]
-        extra   = [s for s in resume_counter if s not in jd_set]
-
-        report[tier] = {
-            "matched": matched,
-            "missing": missing if missing else None,
-            "extra": extra if extra else None
-        }
-
-    return report
-
-
-WEIGHTS = {
-    "core": 0.6,
-    "preferred": 0.25,
-    "tools": 0.15
-}
-
-def compute_weighted_score(report):
-    weights = {"core": 3, "preferred": 2, "tools": 1}
-
-    total_score = 0
-    total_possible = 0
-
-    for tier in ["core", "preferred", "tools"]:
-        tier_weight = weights[tier]
-
-        matched_weighted = sum(report[tier]["matched"].values()) if report[tier]["matched"] else 0
-        missing_count = len(report[tier]["missing"]) if report[tier]["missing"] else 0
-
-        total_score += matched_weighted * tier_weight
-        total_possible += (matched_weighted + missing_count) * tier_weight
-
-    if total_possible == 0:
-        return 0.0
-
-    return round((total_score / total_possible) * 100, 2)
-
-def hiring_verdict(report, score,role):
-    if role == "mlengineer" and report["core"]["missing"]:
-        return "NOT HIRE READY (core ML gaps)"
-    if score >= 70:
-        return "STRONG FIT"
-    if score >= 40:
-        return "MODERATE FIT"
-    return "NOT HIRE READY"
-
-
-def improvement_plan(report):
-    if report["core"]["missing"]:
-        return f"FIX FIRST (core): {report['core']['missing']}"
-    if report["preferred"]["missing"]:
-        return f"IMPROVE NEXT (preferred): {report['preferred']['missing']}"
-    return "NO MAJOR GAPS"
-MIN_ACCEPTABLE_SCORE = 20
-def evaluate_multiple_roles(cleaned_resume_text, raw_resume_text, jd_texts):
-    allowed_roles = set(jd_texts.keys())
-    results = []
-
-    project_text = extract_project_sections(raw_resume_text)
-
-    for role,jd in jd_texts.items():
-        
-        resume_skills = extract_skills(raw_resume_text, role)
-        project_skills = extract_skills(project_text, role)
-
-        PROJECT_WEIGHT = project_strength_multiplier(project_text) 
-
-        for tier in ["core", "preferred", "tools"]:
-            for skill,count in project_skills[tier].items():
-                resume_skills[tier][skill]+=count*PROJECT_WEIGHT
-
-
-        jd_skills = extract_skills(jd, role)
-
-        report = compare_skills(resume_skills, jd_skills)
-        score = compute_weighted_score(report)
-        verdict = hiring_verdict(report, score, role)
-        role_core_skills = SKILLS_DICTIONARY.get(role, {}).get("core", [])
-
-        if not role_core_skills:
-            verdict = "INVALID ROLE DEFINITION"
-            score = 0
-
-        results.append({
-            "role": role,
-            "score": score,
-            "verdict": verdict,
-            "report": report
-        })
-    results.sort(key=lambda x: x["score"], reverse=True)
-
-    if results[0]["score"] < MIN_ACCEPTABLE_SCORE:
-        return [{
-        "role": "none",
-        "score": 0.0,
-        "verdict": "NO SUITABLE ROLE FOUND",
-        "report": {
-            "core": {"matched": None, "missing": None, "extra": None},
-            "preferred": {"matched": None, "missing": None, "extra": None},
-            "tools": {"matched": None, "missing": None, "extra": None}
-            }
-        }]
-    results = [r for r in results if r["role"] in allowed_roles]
-
-    return results
-
-from pathlib import Path
+# ===================== LOAD CONFIG =====================
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 
-jd_texts = {
-    "webdeveloper": (DATA_DIR / "jd_web.txt").read_text(encoding="utf-8"),
-    "datascientist": (DATA_DIR / "jd_ds.txt").read_text(encoding="utf-8"),
-    "mlengineer": (DATA_DIR / "jd_ml.txt").read_text(encoding="utf-8"),
-    "softwaredeveloper": (DATA_DIR / "jd_swe.txt").read_text(encoding="utf-8"),
+with open(DATA_DIR / "skills.json", encoding="utf-8") as f:
+    CONFIG = json.load(f)
+
+SKILLS_DICTIONARY = CONFIG["skills_dictionary"]
+ROLE_ALIASES = CONFIG["role_aliases"]
+SKILL_ALIASES = CONFIG.get("skill_aliases", {})
+
+# 🔥 ADD THIS BLOCK RIGHT HERE
+DERIVED_SKILLS = {
+    "supervisedlearning": ["machine learning", "classification", "regression", "model training"],
+    "unsupervisedlearning": ["clustering", "dimensionality reduction"],
+    "featureengineering": ["data preprocessing", "feature extraction", "data cleaning"],
+    "statistics": ["statistical", "hypothesis", "probability"],
+    "datavisualization": ["visualization", "dashboard", "plot", "graph"],
+
+    # Teacher role inference
+    "lessonplanning": ["lesson plan", "teaching plan", "course planning"],
+    "classroommanagement": ["discipline", "class control", "behavior management"],
+    "studentassessment": ["exam", "test", "grading", "evaluation"],
+    "curriculumdesign": ["syllabus", "curriculum", "course structure"]
 }
 
-def explain_gaps(report):
-    lines = []
-    if report["core"]["missing"]:
-        lines.append("Critical core skills missing: " + ", ".join(report["core"]["missing"]))
-    if report["preferred"]["missing"]:
-        lines.append("Recommended skills to strengthen: " + ", ".join(report["preferred"]["missing"]))
-    if report["tools"]["missing"]:
-        lines.append("Tools to learn: " + ", ".join(report["tools"]["missing"]))
-    return "\n".join(lines) if lines else "Your profile aligns well with the job requirements."
-def generate_learning_plan(report):
-    plan = []
-    if report["core"]["missing"]:
-        for s in report["core"]["missing"]:
-            plan.append(f"Learn core skill: {s}")
-    if report["preferred"]["missing"]:
-        for s in report["preferred"]["missing"]:
-            plan.append(f"Improve skill: {s}")
-    if report["tools"]["missing"]:
-        for s in report["tools"]["missing"]:
-            plan.append(f"Practice tool: {s}")
-    return plan
 
-def save_final_report(result):
-    output_dir = Path("outputs")
-    output_dir.mkdir(exist_ok=True)
+# ===================== TEXT REPAIR =====================
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    report_path = output_dir / f"career_report_{timestamp}.txt"
+def repair_broken_spacing(text):
+    fixed_lines = []
+    for line in text.splitlines():
+        if re.match(r'^(?:[A-Za-z]\s+){3,}[A-Za-z]$', line.strip()):
+            fixed_lines.append(line.replace(" ", ""))
+        else:
+            fixed_lines.append(line)
+    return "\n".join(fixed_lines)
 
-    with open(report_path, "w", encoding="utf-8") as f:
-        f.write(f"Recommended Role: {result['role'].upper()}\n")
-        f.write(f"Match Score: {result['score']}%\n")
-        f.write(f"Verdict: {result['verdict']}\n\n")
+def rebuild_word_boundaries(text):
+    # Insert space between lower→upper and letter→digit transitions
+    text = re.sub(r'([a-z])([A-Z])', r'\1 \2', text)
+    text = re.sub(r'([a-zA-Z])(\d)', r'\1 \2', text)
+    text = re.sub(r'(\d)([a-zA-Z])', r'\1 \2', text)
+    return text
 
-        f.write("Gap Analysis:\n")
-        f.write(explain_gaps(result["report"]) + "\n\n")
+def normalize(text):
+    text = text.lower()
+    text = re.sub(r'(?<=\b[a-z])\s+(?=[a-z]\b)', '', text)
+    text = text.replace("postgre sql", "postgresql")
+    text = text.replace("my sql", "mysql")
+    text = text.replace("sci kit learn", "scikitlearn")
+    text = re.sub(r'[^a-z0-9+.# ]', ' ', text)
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
 
-        f.write("Learning Roadmap:\n")
-        for step in generate_learning_plan(result["report"]):
-            f.write("- " + step + "\n")
+def normalize_skill(skill):
+    return SKILL_ALIASES.get(skill, skill)
 
-    return report_path
 
-from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+# ===================== EXTRACTION =====================
 
-def generate_pdf_report(result, txt_path):
-    pdf_path = txt_path.with_suffix(".pdf")
+def extract_project_sections(text):
+    lines = text.splitlines()
+    capture = False
+    collected = []
 
-    styles = getSampleStyleSheet()
-    story = []
+    for line in lines:
+        clean = line.strip().lower()
 
-    title = f"Career Fit Report"
-    subtitle = f"Recommended Role: {result['role'].upper()}"
+        if clean in ["projects", "project experience"]:
+            capture = True
+            continue
 
-    story.append(Paragraph(title, styles["Title"]))
-    story.append(Paragraph(subtitle, styles["Heading2"]))
-    story.append(Spacer(1, 12))
+        if capture and clean in ["education", "skills", "summary", "experience"]:
+            break
 
-    story.append(Paragraph(f"<b>Match Score:</b> {result['score']}%", styles["BodyText"]))
-    story.append(Paragraph(f"<b>Verdict:</b> {result['verdict']}", styles["BodyText"]))
-    story.append(Spacer(1, 12))
+        if capture and line.strip():
+            collected.append(line)
 
-    story.append(Paragraph("<b>Gap Analysis</b>", styles["Heading3"]))
-    for line in explain_gaps(result["report"]).split("\n"):
-        story.append(Paragraph(line, styles["BodyText"]))
+    return " ".join(collected)
 
-    story.append(Spacer(1, 12))
-    story.append(Paragraph("<b>Learning Roadmap</b>", styles["Heading3"]))
 
-    for step in generate_learning_plan(result["report"]):
-        story.append(Paragraph("• " + step, styles["BodyText"]))
+def extract_skills(text, role):
+    text = normalize(text)
+    found = {"core": Counter(), "preferred": Counter(), "tools": Counter()}
 
-    doc = SimpleDocTemplate(str(pdf_path))
-    doc.build(story)
-
-    return pdf_path
-
-def print_career_ranking(results):
-    print("\n" + "="*45)
-    print("           CAREER FIT RANKING")
-    print("="*45)
-
-    for rank, r in enumerate(results, start=1):
-        print(f"\n{rank}. ROLE: {r['role'].upper()}")
-        print("-"*35)
-        print(f"MATCH SCORE : {r['score']}%")
-        print(f"VERDICT     : {r['verdict']}")
-        print(f"NEXT ACTION : {improvement_plan(r['report'])}")
-
-        for tier in ["core", "preferred", "tools"]:
-            info = r["report"][tier]
-            print(f"\n{tier.upper()} SKILLS")
-            print(f"  matched : {info['matched'] if info['matched'] else 'None'}")
-            print(f"  missing : {info['missing'] if info['missing'] else 'None'}")
-            print(f"  extra   : {info['extra'] if info['extra'] else 'None'}")
-
-        print("\n" + "-"*45)
-def explain_best_fit(results):
-    best = results[0]
-    others = results[1:]
-
-    reasons = []
-    for tier in ["core", "preferred", "tools"]:
-        best_match = len(best["report"][tier]["matched"])
-        other_match = sum(len(o["report"][tier]["matched"]) for o in others)
-
-        if best_match > other_match:
-            reasons.append(f"stronger {tier} skill alignment")
-
-    return ", ".join(reasons) if reasons else "overall higher skill match"
-def explain_recommendation(result):
-    reasons = []
+    role = ROLE_ALIASES.get(role, role)
+    role_skills = SKILLS_DICTIONARY[role]
 
     for tier in ["core", "preferred", "tools"]:
-        matched = result["report"][tier]["matched"] or []
-        missing = result["report"][tier]["missing"] or []
+        for skill in role_skills[tier]:
+            skill_norm = normalize_skill(skill)
+            pattern = rf'\b{re.escape(skill_norm)}\b'
 
-        if matched:
-            reasons.append(f"strong {tier} skill match ({', '.join(matched)})")
+            if re.search(pattern, text):
+                found[tier][skill_norm] += 1
 
-        if missing:
-            reasons.append(f"some gaps in {tier} skills ({', '.join(missing)})")
+    # Bonus credit: DB implies SQL knowledge
+                if skill_norm in ("postgresql", "mysql"):
+                    found["core"]["sql"] += 1
 
-    return "This role was recommended because " + ", and ".join(reasons) + "."
+            else:
+                if tier in ("core", "preferred"):
+                    for trigger in DERIVED_SKILLS.get(skill_norm, []):
+                        if trigger in text:
+                            found[tier][skill_norm] += 0.5
 
-if __name__ == "__main__":
-    raw_resume = open("resume_text_final.txt", encoding="utf-8").read()
-    cleaned_resume = open("resume_text_cleaned.txt", encoding="utf-8").read()
+
+    return found
+
+
+# ===================== SCORING =====================
+
+def compare_skills(resume, target):
+    report = {}
+
+    for tier in ["core", "preferred", "tools"]:
+        r = resume[tier]
+        t = set(target[tier].keys())
+
+        matched = {k: r[k] for k in r if k in t}
+        missing = [k for k in t if k not in r]
+        extra = [k for k in r if k not in t]
+
+        report[tier] = {"matched": matched, "missing": missing, "extra": extra}
+
+    return report
+
+
+def compute_weighted_score(report):
+    weights = {"core": 3, "preferred": 1.5, "tools": 1}
+
+    total = 0
+    possible = 0
+
+    for tier, w in weights.items():
+        matched = len(report[tier]["matched"])
+        missing = len(report[tier]["missing"])
+
+        total += matched * w
+        possible += (matched + missing) * w
+
+    return round((total / possible) * 100, 2) if possible else 0
+
+# ===================== MAIN PIPELINE =====================
+
+MIN_ACCEPTABLE_SCORE = 10
+
+def evaluate_multiple_roles(cleaned_resume, raw_resume, jd_texts):
+    raw_resume = repair_broken_spacing(raw_resume)
+    cleaned_resume = repair_broken_spacing(cleaned_resume)
 
     project_text = extract_project_sections(raw_resume)
 
-    print("\n--- PROJECT CONTENT ---\n")
-    print(project_text)
+    results = []
 
-    results = evaluate_multiple_roles(cleaned_resume, raw_resume, jd_texts)
+    for role in jd_texts:
+        resume_skills = extract_skills(cleaned_resume, role)
+        project_skills = extract_skills(project_text, role)
 
-    print_career_ranking(results)
+        for tier in project_skills:
+            for skill, count in project_skills[tier].items():
+                PROJECT_MULTIPLIER = 3
+
+                for tier in project_skills:
+                    for skill, count in project_skills[tier].items():
+                        resume_skills[tier][skill] += count * PROJECT_MULTIPLIER
+
+
+        target = {
+            tier: {s: 1 for s in SKILLS_DICTIONARY[role][tier]}
+            for tier in ["core", "preferred", "tools"]
+        }
+
+        report = compare_skills(resume_skills, target)
+        score = compute_weighted_score(report)
+        core_matches = len(report["core"]["matched"])
+
+        if core_matches == 0:
+            continue
+
+        verdict = (
+            "STRONG FIT" if score >= 70 else
+            "MODERATE FIT" if score >= 40 else
+            "NOT HIRE READY"
+        )
+
+        results.append({"role": role, "score": score, "verdict": verdict, "report": report})
+
+    # Remove roles that matched nothing
+    valid_results = []
+    for r in results:
+        total_matches = sum(len(r["report"][tier]["matched"]) for tier in ["core", "preferred", "tools"])
+        if total_matches > 0:
+            valid_results.append(r)
+
+# If nothing meaningful matched → NO SUITABLE ROLE
+    if not valid_results:
+        return [{
+            "role": "none",
+            "score": 0.0,
+            "verdict": "NO SUITABLE ROLE FOUND",
+            "report": {
+                "core": {"matched": None, "missing": None, "extra": None},
+                "preferred": {"matched": None, "missing": None, "extra": None},
+                "tools": {"matched": None, "missing": None, "extra": None}
+            }
+     }]
+
+# Rank only meaningful roles
+    valid_results.sort(key=lambda x: x["score"], reverse=True)
+
+# Final verdict tuning
+    best = valid_results[0]
+    if best["score"] < MIN_ACCEPTABLE_SCORE:
+        best["verdict"] = "NO SUITABLE ROLE FOUND"
+    elif best["score"] >= 70:
+        best["verdict"] = "STRONG FIT"
+    elif best["score"] >= 50:
+        best["verdict"] = "HIRE READY"
+    elif best["score"] >= 35:
+        best["verdict"] = "ALMOST READY"
+    elif best["score"] >= 20:
+        best["verdict"] = "FOUNDATION PRESENT"
+    else:
+        best["verdict"] = "NOT HIRE READY"
+
+    return valid_results
+
+
+
+# ===================== REPORTING =====================
+
+def generate_learning_plan(report):
+    plan = []
+    for tier in ["core", "preferred", "tools"]:
+        missing = report[tier].get("missing")
+        if not missing:
+            continue
+        for skill in missing:
+            plan.append(f"Learn {skill}")
+    return plan
+
+
+def explain_recommendation(result):
+    reasons = []
+    for tier in result["report"]:
+        if result["report"][tier]["matched"]:
+            reasons.append(f"{tier} strength: {', '.join(result['report'][tier]['matched'])}")
+    return "This role was recommended because " + ", ".join(reasons) + "."
+
+def explain_gaps(report):
+    lines = []
+    for tier in ["core", "preferred", "tools"]:
+        missing = report[tier].get("missing")
+        if missing:
+            lines.append(f"{tier.upper()} missing: " + ", ".join(missing))
+    return "\n".join(lines) if lines else "No major skill gaps detected."
+
+def save_final_report(result):
+    out = Path("outputs")
+    out.mkdir(exist_ok=True)
+    path = out / f"career_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(f"Role: {result['role']}\nScore: {result['score']}%\nVerdict: {result['verdict']}\n")
+
+    return path
+
+
+def generate_pdf_report(result, txt_path):
+    pdf = txt_path.with_suffix(".pdf")
+    styles = getSampleStyleSheet()
+    story = [
+        Paragraph("Career Fit Report", styles["Title"]),
+        Paragraph(f"Role: {result['role']}", styles["Heading2"]),
+        Paragraph(f"Score: {result['score']}%", styles["BodyText"]),
+        Paragraph(f"Verdict: {result['verdict']}", styles["BodyText"]),
+        Spacer(1, 12),
+    ]
+
+    for step in generate_learning_plan(result["report"]):
+        story.append(Paragraph(step, styles["BodyText"]))
+
+    SimpleDocTemplate(str(pdf)).build(story)
+    return pdf

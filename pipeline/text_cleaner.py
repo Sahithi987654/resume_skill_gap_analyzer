@@ -2,12 +2,12 @@ import re
 from pathlib import Path
 
 def clean_text(text):
+    text = re.sub(r'(?<=\b[a-zA-Z])\s+(?=[a-zA-Z]\b)', '', text)
     text = text.lower()
-    text = re.sub(r'\S+@\S+', ' ', text)
-    text = re.sub(r'http\S+', ' ', text)
-    text = re.sub(r'[^a-z0-9+.#,()/\- ]', ' ', text)
+    text = re.sub(r'[^a-z0-9+.# ]', ' ', text)
     text = re.sub(r'\s+', ' ', text).strip()
     return text
+
 
 if __name__ == "__main__":
     input_path = Path("outputs/resume_text_final.txt")

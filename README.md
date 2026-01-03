@@ -121,6 +121,9 @@ Job description ingestion from job portals
 Multi-resume comparison
 Deployment as a web service
 
+Demo : https://resumeskillgapanalyzer-wa6n3om3mqmw3zxbutrgpr.streamlit.app/
+
 Author
 
 Sahithi Mandapuri
+Built and deployed as an end-to-end production system using Streamlit Cloud.

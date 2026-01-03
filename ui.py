@@ -17,8 +17,6 @@ from pipeline.role_builder import build_new_role
 from pipeline.role_inference import infer_role_name
 
 
-# ------------------- Setup -------------------
-
 st.set_page_config(page_title="Resume Skill Gap Analyzer", layout="centered")
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -42,17 +40,12 @@ if "analysis_done" not in st.session_state:
 if "last_input_signature" not in st.session_state:
     st.session_state.last_input_signature = None
 
-
-# ------------------- UI -------------------
-
 st.title("Resume Skill Gap Analyzer")
 st.write("Upload your resume and optionally paste a job description.")
 
 resume_file = st.file_uploader("Upload Resume (PDF)", type=["pdf"])
 jd_input = st.text_area("Paste Job Description (optional)")
 
-
-# ------------------- Input Change Detection -------------------
 
 current_signature = (
     resume_file.name if resume_file else "",
@@ -63,8 +56,6 @@ if current_signature != st.session_state.last_input_signature:
     st.session_state.analysis_done = False
     st.session_state.last_input_signature = current_signature
 
-
-# ------------------- Analyze Button -------------------
 
 if st.button("Analyze"):
 
@@ -92,7 +83,6 @@ if st.button("Analyze"):
         st.error("Failed to extract text from resume.")
         st.stop()
 
-    # ------------------- Load Job Descriptions -------------------
 
     jd_texts = {}
 
@@ -116,8 +106,6 @@ if st.button("Analyze"):
         st.session_state.target_role = None
 
 
-    # ------------------- Skill Analysis -------------------
-
     with st.spinner("Analyzing skills..."):
         results = evaluate_multiple_roles(cleaned_resume, raw_text, jd_texts)
 
@@ -126,8 +114,6 @@ if st.button("Analyze"):
     if st.session_state.target_role and best["role"] != st.session_state.target_role:
         st.warning("Resume matches another role better than the provided job description.")
 
-
-    # ------------------- Save Report Once -------------------
 
     if not st.session_state.analysis_done:
         report_path = save_final_report(best)
@@ -142,8 +128,6 @@ if st.button("Analyze"):
         report_path = st.session_state.report_path
         pdf_path = st.session_state.pdf_path
 
-
-    # ------------------- Display Results -------------------
 
     st.success("Analysis complete")
     st.markdown("---")
@@ -183,7 +167,6 @@ if st.button("Analyze"):
         learn_from_jd(jd_input)
         st.success("New skills saved for future sessions.")
 
-    # ------------------- Downloads -------------------
 
     with open(report_path, "r", encoding="utf-8") as f:
         st.download_button("Download TXT Report", f.read(), file_name=report_path.name)

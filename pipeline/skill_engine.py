@@ -7,8 +7,6 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 
 
-# ===================== LOAD CONFIG =====================
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
 
@@ -19,7 +17,6 @@ SKILLS_DICTIONARY = CONFIG["skills_dictionary"]
 ROLE_ALIASES = CONFIG["role_aliases"]
 SKILL_ALIASES = CONFIG.get("skill_aliases", {})
 
-# 🔥 ADD THIS BLOCK RIGHT HERE
 DERIVED_SKILLS = {
     "supervisedlearning": ["machine learning", "classification", "regression", "model training"],
     "unsupervisedlearning": ["clustering", "dimensionality reduction"],
@@ -27,15 +24,12 @@ DERIVED_SKILLS = {
     "statistics": ["statistical", "hypothesis", "probability"],
     "datavisualization": ["visualization", "dashboard", "plot", "graph"],
 
-    # Teacher role inference
     "lessonplanning": ["lesson plan", "teaching plan", "course planning"],
     "classroommanagement": ["discipline", "class control", "behavior management"],
     "studentassessment": ["exam", "test", "grading", "evaluation"],
     "curriculumdesign": ["syllabus", "curriculum", "course structure"]
 }
 
-
-# ===================== TEXT REPAIR =====================
 
 def repair_broken_spacing(text):
     fixed_lines = []
@@ -47,7 +41,6 @@ def repair_broken_spacing(text):
     return "\n".join(fixed_lines)
 
 def rebuild_word_boundaries(text):
-    # Insert space between lower→upper and letter→digit transitions
     text = re.sub(r'([a-z])([A-Z])', r'\1 \2', text)
     text = re.sub(r'([a-zA-Z])(\d)', r'\1 \2', text)
     text = re.sub(r'(\d)([a-zA-Z])', r'\1 \2', text)
@@ -65,9 +58,6 @@ def normalize(text):
 
 def normalize_skill(skill):
     return SKILL_ALIASES.get(skill, skill)
-
-
-# ===================== EXTRACTION =====================
 
 def extract_project_sections(text):
     lines = text.splitlines()
@@ -105,7 +95,6 @@ def extract_skills(text, role):
             if re.search(pattern, text):
                 found[tier][skill_norm] += 1
 
-    # Bonus credit: DB implies SQL knowledge
                 if skill_norm in ("postgresql", "mysql"):
                     found["core"]["sql"] += 1
 
@@ -118,8 +107,6 @@ def extract_skills(text, role):
 
     return found
 
-
-# ===================== SCORING =====================
 
 def compare_skills(resume, target):
     report = {}
@@ -152,7 +139,6 @@ def compute_weighted_score(report):
 
     return round((total / possible) * 100, 2) if possible else 0
 
-# ===================== MAIN PIPELINE =====================
 
 MIN_ACCEPTABLE_SCORE = 10
 
@@ -197,14 +183,12 @@ def evaluate_multiple_roles(cleaned_resume, raw_resume, jd_texts):
 
         results.append({"role": role, "score": score, "verdict": verdict, "report": report})
 
-    # Remove roles that matched nothing
     valid_results = []
     for r in results:
         total_matches = sum(len(r["report"][tier]["matched"]) for tier in ["core", "preferred", "tools"])
         if total_matches > 0:
             valid_results.append(r)
 
-# If nothing meaningful matched → NO SUITABLE ROLE
     if not valid_results:
         return [{
             "role": "none",
@@ -217,10 +201,8 @@ def evaluate_multiple_roles(cleaned_resume, raw_resume, jd_texts):
             }
      }]
 
-# Rank only meaningful roles
     valid_results.sort(key=lambda x: x["score"], reverse=True)
 
-# Final verdict tuning
     best = valid_results[0]
     if best["score"] < MIN_ACCEPTABLE_SCORE:
         best["verdict"] = "NO SUITABLE ROLE FOUND"
@@ -236,10 +218,6 @@ def evaluate_multiple_roles(cleaned_resume, raw_resume, jd_texts):
         best["verdict"] = "NOT HIRE READY"
 
     return valid_results
-
-
-
-# ===================== REPORTING =====================
 
 def generate_learning_plan(report):
     plan = []
